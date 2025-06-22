@@ -4,125 +4,132 @@ class Node:
         self.data = data
         self.next = None
 
+## linked list class
+class LinkedList:
+    def __init__(self):
+        self.head = None
 
-# traverse and print the singly linked list
-def printList(head):
-    while head:
-        print(head.data, end=" ")
-        head = head.next
+    # traverse and print the singly linked list
+    def printList(self, head):
+        while head:
+            print(head.data, end=" ")
+            head = head.next
 
+    def checkHead(self, head):
+        if head is None:
+            raise ValueError("List is empty")
 
-# length of the linked list
-def length(head):
-    count = 0
-    while head:
-        count += 1
-        head = head.next
-    return count
+    # length of the linked list
+    def length(self, head):
+        count = 0
+        while head:
+            count += 1
+            head = head.next
+        return count
 
+    def search(self, head, key):
+        while head:
+            if head.data == key:
+                return head
+            # move to next node
+            head = head.next
+        return None
 
-def search(head, key):
-    while head:
+    # delete a node from the linked list
+    def delete(self, head, key):
+        self.checkHead(head)
         if head.data == key:
+            head = head.next
             return head
-        # move to next node
-        head = head.next
-    return None
+        else:
+            current = head
+            while current.next:
+                if current.next.data == key:
+                    current.next = current.next.next
+                    break
+                # update current
+                current = current.next
+            return head
 
-# delete a node from the linked list
-def delete(head, key):
-    checkHead(head)
-    if head.data == key:
-        head = head.next
+    # insert a new node at the beginning
+    def insert(self, head, key):
+        self.checkHead(head)
+        new_node = Node(key)
+        new_node.next = head
+        head = new_node
         return head
-    else:
+
+    def insertAt(self, head, key, index):
+        if index == 0:
+            return self.insert(head, key)
+        else:
+            current = head
+            for i in range(index - 1):
+                if current.next is None:
+                    raise ValueError("Index out of range")
+                current = current.next
+            # Create new node
+            new_node = Node(key)
+            # Make next of new Node as next of current
+            new_node.next = current.next
+            # Make current next as new_node
+            current.next = new_node
+            return head
+
+    # insert a new node at the end
+    def insertAtEnd(self, head, key):
+        self.checkHead(head)
+        new_node = Node(key)
+
         current = head
         while current.next:
-            if current.next.data == key:
-                current.next = current.next.next
-                break
-            # update current
             current = current.next
-        return head
-
-
-def checkHead(head):
-    if head is None:
-        raise ValueError("List is empty")
-
-
-# insert a new node at the beginning
-def insert(head, key):
-    checkHead(head)
-    new_node = Node(key)
-    new_node.next = head
-    head = new_node
-    return head
-
-
-def insertAt(head, key, index):
-    if index == 0:
-        return insert(head, key)
-    else:
-        current = head
-        for i in range(index - 1):
-            if current.next is None:
-                raise ValueError("Index out of range")
-            current = current.next
-        # Create new node
-        new_node = Node(key)
-        # Make next of new Node as next of current
-        new_node.next = current.next
-        # Make current next as new_node
         current.next = new_node
+
         return head
 
-
-# insert a new node at the end
-def insertAtEnd(head, key):
-    checkHead(head)
-    new_node = Node(key)
-
-    current = head
-    while current.next:
-        current = current.next
-    current.next = new_node
-
-    return head
-
-def pop(head,index):
-    checkHead(head)
-    for i in range(index-1):
+    def pop(self, head, index):
+        self.checkHead(head)
+        for i in range(index - 1):
+            if head.next is None:
+                raise ValueError("Index out of range")
+            head = head.next
         if head.next is None:
             raise ValueError("Index out of range")
-        head = head.next
-    if head.next is None:
-        raise ValueError("Index out of range")
-    else:
-        temp = head.next # set the value
-        head.next = head.next.next # update the next
-        return temp # return the value
+        else:
+            temp = head.next  # set the value
+            head.next = head.next.next  # update the next
+            return temp  # return the value
 
-def get(head,index):
-    checkHead(head)
-    for i in range(index-1):
-        if head.next is None:
-            raise ValueError("Index out of range")
-        head = head.next
-    return head.data
+    def get(self, head, index):
+        self.checkHead(head)
+        for i in range(index - 1):
+            if head.next is None:
+                raise ValueError("Index out of range")
+            head = head.next
+        return head.data
 
+    def toList(self, head):
+        if head is None:
+            return "[]"
+        else:
+            result = "["
+            while head:
+                result += str(head.data) + ", "
+                head = head.next
+            return result[:-2] + "]"
 
-def runSearch(head, key):
-    head = search(head, key)
-    if head:
-        print(f"Found: {head.data}")
-    else:
-        print("Not Found")
+    def runSearch(self, head, key):
+        head = self.search(head, key)
+        if head:
+            print(f"Found: {head.data}")
+        else:
+            print("Not Found")
 
 
 def main():
     # 10->20->30->40->50->None
-
+    ll = LinkedList()
     arr = [10, 20, 30, 40, 50]
     head = None
     for a in arr:
@@ -137,36 +144,39 @@ def main():
             last.next = Node(a)
 
     print("Before insertion: ")
-    printList(head)
+    ll.printList(head)
 
     print()
     # insert a new node at the beginning
-    head = insert(head, 100)
+    head = ll.insert(head, 100)
     # check if the new node is inserted correctly
     print("After insertion of 100 at the beginning: ")
-    printList(head)
+    ll.printList(head)
 
     print()
-    head = insertAtEnd(head, 60)
+    head = ll.insertAtEnd(head, 60)
     print("After insertion  of 60 at the end: ")
-    printList(head)
+    ll.printList(head)
     print()
 
     print("70 at the index 2")
-    head = insertAt(head, 70, 2)
-    printList(head)
+    head = ll.insertAt(head, 70, 2)
+    ll.printList(head)
 
     print()
-    print("Length of the linked list: ", length(head))
+    print("Length of the linked list: ", ll.length(head))
 
-   # print()
-   # print("delete 30")
-   # head = delete(head, 30)
-    #printList(head)
+    # print()
+    # print("delete 30")
+    # head = delete(head, 30)
+    # printList(head)
 
     print()
     print("get at 2")
-    print(get(head,2))
+    print(ll.get(head, 2))
+    print("to list:")
+    print(ll.toList(head))
+
 
 if __name__ == "__main__":
     main()
