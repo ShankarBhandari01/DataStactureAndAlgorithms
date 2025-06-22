@@ -21,6 +21,26 @@ def search(head, key):
     return None
 
 
+# insert a new node at the beginning
+def insert(head,key):
+    new_node = Node(key)
+    new_node.next=head
+    head=new_node
+    return head
+
+# insert a new node at the end
+def insertAtEnd(head,key):
+    if head is None:
+        raise ValueError("List is empty")
+    new_node = Node(key)
+
+    current = head
+    while current.next:
+        current = current.next
+    current.next = new_node
+
+    return head
+
 def runSearch(head, key):
     head = search(head, key)
     if head:
@@ -31,17 +51,33 @@ def runSearch(head, key):
 
 def main():
     # 10->20->30->40->50->None
-    head = Node(10)
-    head.next = Node(20)
-    head.next.next = Node(30)
-    head.next.next.next = Node(40)
-    head.next.next.next.next = Node(50)
-    head.next.next.next.next.next = None
+
+    arr = [10, 20, 30, 40, 50]
+    head = None
+    for a in arr:
+        # if head is not exist
+        if head is None:
+            head = Node(a)
+        else:
+            # if head is exist get the last node
+            last = head
+            while last.next:
+                last = last.next
+            last.next = Node(a)
+
+
+    print("Before insertion: ")
     printList(head)
     print()
-    runSearch(head, 30)
+    # insert a new node at the beginning
+    head = insert(head, 100)
+    # check if the new node is inserted correctly
+    print("After insertion of 100 at the beginning: ")
+    printList(head)
     print()
-    runSearch(head, 100)
+    head = insertAtEnd(head, 60)
+    print("After insertion  of 60 at the end: ")
+    printList(head)
 
 
 if __name__ == "__main__":
